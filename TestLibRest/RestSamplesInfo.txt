@@ -1,0 +1,110 @@
+http://developer.yahoo.com/dotnet/howto-rest_cs.html
+
+Issuing HTTP GET Requests
+The key classes here are HttpWebRequest and HttpWebResponse from System.Net.
+
+The following method issues a request and returns the entire response as one long string:
+
+static string HttpGet(string url) {
+  HttpWebRequest req = WebRequest.Create(url)
+                       as HttpWebRequest;
+  string result = null;
+  using (HttpWebResponse resp = req.GetResponse()
+                                as HttpWebResponse)
+  {
+    StreamReader reader =
+        new StreamReader(resp.GetResponseStream());
+    result = reader.ReadToEnd();
+  }
+  return result;
+}
+Remember that if the request URL includes parameters, they must be properly encoded (e.g., a space is %20, etc.). The System.Web namespace has a class called HttpUtility, with a static method called UrlEncode for just such encoding.
+
+Issuing HTTP POST Requests
+URL encoding is also required for POST requests -- in addition to form encoding, as shown in the following method:
+
+For more examples, see this page on the Yahoo! Developers Network.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+http://devlicio.us/blogs/derik_whittaker/archive/2009/02/14/posting-data-to-a-rest-service-using-c.aspx
+
+Posting data to a REST service using C#
+As Rest services are becoming more and more common the need is arising to be able to post data to them via .net.  Now normally when you want to post data to a web resource you normally would do so using a web service.  And when you use a web service all the ‘plumbing’ is taking care of for you by the .Net framework.  However since we are not posting to a web service there is a bit of code you need to create in order to post to a REST service.  The good news is that the amount of code you need to create is not all the bad.
+
+Lets pretend we want to post data to the following REST service http://localhost:2844/Home/PostDataTester which takes in 3 values
+
+someValue which is a string
+anotherValue which is a string
+finalValue which is an Int32
+Now that we know what the REST service contract looks like we should take a look at the code needed to actually connect to and post the data.
+
+First we are going to look at the main logic which will post the data, however, this method has 2 helper methods which we also need to discuss.
+
+view plaincopy to clipboardprint?
+public void SendMessage( string endPoint, Dictionary< string, string > paramters)  
+{  
+    var populatedEndPoint = CreateFormattedPostRequest( paramters );  
+    byte[] bytes = Encoding.UTF8.GetBytes( populatedEndPoint );  
+  
+    HttpWebRequest request = CreateWebRequest( endPoint, bytes.Length );  
+  
+    using ( var requestStream = request.GetRequestStream() )  
+    {  
+        requestStream.Write( bytes, 0, bytes.Length );  
+    }  
+  
+    using ( var response = (HttpWebResponse)request.GetResponse() )  
+    {  
+        if ( response.StatusCode != HttpStatusCode.OK )  
+        {  
+            string message = String.Format( "POST failed. Received HTTP {0}", response.StatusCode );  
+            throw new ApplicationException( message );  
+        }  
+    }  
+}  
+As you can see from above, the code needed to actually post the data is not too bad, in fact it is fairly simple.  Now that we have seen the main logic lets take a look at the various helpers methods.
+
+The first helper method is the method which will actually create the HttpWebRequest object for us
+
+view plaincopy to clipboardprint?
+private HttpWebRequest CreateWebRequest( string endPoint, Int32 contentLength )  
+{  
+    var request = (HttpWebRequest)WebRequest.Create( endPoint );  
+  
+    request.Method = "POST";  
+    request.ContentLength = contentLength;  
+    request.ContentType = "application/x-www-form-urlencoded";  
+  
+    return request;  
+}  
+Pay close attention to 2 things here
+
+The method on the request must be POST
+The content type on the request must be application/x-www-form-urlencoded
+The second helper method will take in a list of values which need to be posted and create the value query string for posting
+
+view plaincopy to clipboardprint?
+private string CreateFormattedPostRequest( ICollection> values )  
+{  
+    var paramterBuilder = new StringBuilder();  
+    var counter = 0;  
+    foreach ( var value in values )  
+    {  
+        paramterBuilder.AppendFormat( "{0}={1}", value.Key, HttpUtility.UrlEncode( value.Value ) );  
+  
+        if ( counter != values.Count - 1 )  
+        {  
+            paramterBuilder.Append( "&" );  
+        }  
+  
+        counter++;  
+    }  
+  
+    return paramterBuilder.ToString();  
+}  
+Pay close attention to the fact that we are doing UrlEnoding on our values which we are pushing to the service, this is very, very important.
+
+As you can see, the actual code to post a message to a REST service is simple and trivial and can be implemented with very little effort.
+
+Till next time,
