@@ -19,6 +19,7 @@ namespace Bau.Libraries.LibHelper.Formats
 				return string.Format("{0:dd-MM-yyyy}", dtmValue);
 		}
 
+
 		/// <summary>
 		///		Formatea un valor lógico
 		/// </summary>
