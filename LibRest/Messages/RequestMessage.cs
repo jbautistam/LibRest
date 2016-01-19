@@ -81,11 +81,6 @@ namespace Bau.Libraries.LibRest.Messages
 		public string ContentType { get; set; }
 
 		/// <summary>
-		///		Cuerpo del mensaje
-		/// </summary>
-		public string Body { get; set; }
-
-		/// <summary>
 		///		Parámetros de la Url (por ejemplo: http://www.sample.com/Client/{Id}/{Order}/)
 		/// </summary>
 		public ParameterDataCollection UrlParameters { get; set; }

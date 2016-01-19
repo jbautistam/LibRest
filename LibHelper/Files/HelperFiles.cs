@@ -91,7 +91,8 @@ namespace Bau.Libraries.LibHelper.Files
 		/// 	Carga un archivo de texto en una cadena
 		/// </summary>
 		public static string LoadTextFile(string strFileName, System.Text.Encoding objEncoding = null)
-		{ string strData, strContent = "";
+		{ System.Text.StringBuilder sbContent = new System.Text.StringBuilder();
+			string strData;
  
 				// Asigna la codificación predeterminada
 					if (objEncoding == null)
@@ -101,16 +102,16 @@ namespace Bau.Libraries.LibHelper.Files
 						{ // Lee los datos
 								while ((strData = stmFile.ReadLine()) != null)
 									{ // Le añade un salto de línea si es necesario
-											if (strContent != "")
-												strContent += "\n";
+											if (sbContent.Length != 0)
+												sbContent.AppendLine();
 										// Añade la línea leída
-											strContent += strData;
+											sbContent.Append(strData);
 									}
 							// Cierra el stream
 								stmFile.Close();
 						}
 				// Devuelve el contenido
-					return strContent;
+					return sbContent.ToString();
 		}
 
 		/// <summary>

@@ -31,7 +31,7 @@ namespace Bau.Libraries.LibMarkupLanguage.Services.XML
 													objMLFile = Load(objDocument);
 											}
 										catch (Exception objException)
-											{ throw new ParserException("Error en la interpretación del archivo XML", objException);
+											{ throw new ParserException("Error en la interpretación del archivo XML " + strFileName, objException);
 											}
 								// Cierra el reader
 									objReader.Close();

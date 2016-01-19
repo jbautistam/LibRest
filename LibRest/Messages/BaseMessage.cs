@@ -15,5 +15,10 @@ namespace Bau.Libraries.LibRest.Messages
 		///		Cabeceras
 		/// </summary>
 		public Headers.HeadersCollection Headers { get; set; }
+
+		/// <summary>
+		///		Cuerpo del mensaje
+		/// </summary>
+		public string Body { get; set; }
 	}
 }

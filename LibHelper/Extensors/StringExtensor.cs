@@ -231,9 +231,9 @@ namespace Bau.Libraries.LibHelper.Extensors
 										strSource = strSource.Cut(strSeparator, out strPart);
 									// Añade la parte localizada a la colección y continúa con la cadena restante
 										if (!strSource.IsEmpty())
-											{ objColSplit.Add(strSource);
-												strSource = strPart;
-											}
+											objColSplit.Add(strSource);
+									// Pasa al siguiente
+										strSource = strPart;
 							}
 						while (!strSource.IsEmpty());
 				// Devuelve la primera parte de la cadena
@@ -253,6 +253,18 @@ namespace Bau.Libraries.LibHelper.Extensors
 		}
 
 		/// <summary>
+		///		Elimina una cadena al final de otra
+		/// </summary>
+		public static string RemoveEnd(this string strSource, string strEnd)
+		{ if (strSource.IsEmpty() || !strSource.EndsWith(strEnd, StringComparison.CurrentCultureIgnoreCase))
+				return strSource;
+			else if (strSource.Length == strEnd.Length)
+				return "";
+			else
+				return strSource.Substring(0, strSource.Length - strEnd.Length);
+		}
+
+		/// <summary>
 		///		Reemplaza una cadena teniendo en cuenta el tipo de comparación
 		/// </summary>
 		public static string ReplaceWithStringComparison(this string strSource, string strSearch, string strReplace, 
@@ -260,7 +272,7 @@ namespace Bau.Libraries.LibHelper.Extensors
 		{ int intIndex; 
 
 				// Recorre la cadena sustituyendo los valores
-					if (!strSearch.EqualsIgnoreCase(strReplace))
+					if (!strSource.IsEmpty() && !strSearch.EqualsIgnoreCase(strReplace))
 						do
 							{ if ((intIndex = strSource.IndexOf(strSearch, intComparison)) >= 0)
 									{ string strLast;
@@ -383,6 +395,42 @@ namespace Bau.Libraries.LibHelper.Extensors
 								strResult += chrChar;
 				// Devuelve el resultado
 					return strResult;
+		}
+
+		/// <summary>
+		///		Extrae las cadenas que se corresponden con un patrón
+		/// </summary>
+		public static List<string> Extract(this string strSource, string strStart, string strEnd) 
+		{ List<string> objColResults = new List<string>();
+
+				// Obtiene las coincidencias
+					if (!strSource.IsEmpty())
+						try 
+							{	System.Text.RegularExpressions.Match objMatch;
+
+									// Crea la expresión de búsqueda
+										objMatch = System.Text.RegularExpressions.Regex.Match(strSource, strStart + "(.|\n)*?" + strEnd, 
+																																					System.Text.RegularExpressions.RegexOptions.IgnoreCase | 
+																																					System.Text.RegularExpressions.RegexOptions.Compiled, 
+																																					TimeSpan.FromSeconds(1));
+									// Mientras haya una coincidencia
+									while (objMatch.Success)
+										{	string strValue = objMatch.Groups[0].Value.TrimIgnoreNull();
+
+												// Quita la cadena inicial y final
+													strValue = strValue.RemoveStart(strStart);
+													strValue = strValue.RemoveEnd(strEnd);
+												// Añade la cadena encontrada
+													objColResults.Add(strValue.TrimIgnoreNull());
+												// Pasa a la siguiente coincidencia
+													objMatch = objMatch.NextMatch();
+										}   
+							}
+						catch (System.Text.RegularExpressions.RegexMatchTimeoutException objException) 
+							{	System.Diagnostics.Debug.WriteLine("TimeOut: " + objException.Message);
+							}
+				// Devuelve las coincidencis
+					return objColResults;
 		}
 	}
 }

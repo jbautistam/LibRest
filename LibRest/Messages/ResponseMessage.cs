@@ -75,11 +75,6 @@ namespace Bau.Libraries.LibRest.Messages
 		public string Server { get; internal set; }
 
 		/// <summary>
-		///		Mensaje de salida
-		/// </summary>
-		public string Body { get; internal set; }
-
-		/// <summary>
 		///		Excepción asociada al mensaje
 		/// </summary>
 		public Exception Exception { get; private set; }

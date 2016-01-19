@@ -2,7 +2,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -23,6 +22,9 @@ namespace Bau.Controls.ToolTipExtend
 	{ // Constantes privadas
 			private int  cnstIntWidthSeparator = 10;
 		// Enumerados
+			/// <summary>
+			///		Tipo de sección
+			/// </summary>
 			private enum enumSection : int
 				{ SectionTitle = 0,
 					SectionIcon,
@@ -444,6 +446,9 @@ namespace Bau.Controls.ToolTipExtend
       e.Cancel = true;
     }
 
+		/// <summary>
+		///		Indica si el ToolTip tomará la forma de un ToolTipExtend
+		/// </summary>
 	  [	Description("Indica si el ToolTip tomará la forma de un ToolTipExtend"),
 	  	DefaultValue(true)]
     public bool IsToolTipExtend

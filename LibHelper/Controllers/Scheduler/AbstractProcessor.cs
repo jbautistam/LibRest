@@ -89,8 +89,7 @@ namespace Bau.Libraries.LibHelper.Controllers.Scheduler
 
 		/// <summary>
 		///		Identificador del proceso
-		/// </summary>
-		
+		/// </summary>		
 		public string ID
 		{ get 
 				{ // Crea un ID si no existía

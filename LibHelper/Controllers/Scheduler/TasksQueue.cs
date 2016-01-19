@@ -10,10 +10,10 @@ namespace Bau.Libraries.LibHelper.Controllers.Scheduler
 	/// </summary>
 	public class TasksQueue
 	{	// Eventos
-			public event EventHandler<Libraries.LibHelper.Controllers.EventArguments.ActionEventArgs> ActionProcess;
-			public event EventHandler<Libraries.LibHelper.Controllers.EventArguments.ProgressActionEventArgs> ProgressAction;
-			public event EventHandler<Libraries.LibHelper.Controllers.EventArguments.EndProcessEventArgs> EndProcess;
-			public event EventHandler<Libraries.LibHelper.Controllers.EventArguments.ProgressEventArgs> Progress;
+			public event EventHandler<EventArguments.ActionEventArgs> ActionProcess;
+			public event EventHandler<EventArguments.ProgressActionEventArgs> ProgressAction;
+			public event EventHandler<EventArguments.EndProcessEventArgs> EndProcess;
+			public event EventHandler<EventArguments.ProgressEventArgs> Progress;
 
 		public TasksQueue()
 		{ Queue = new List<AbstractProcessor>();
@@ -30,7 +30,7 @@ namespace Bau.Libraries.LibHelper.Controllers.Scheduler
 		///		Añade una tarea a la cola y la ejecuta
 		/// </summary>
 		public void Process(AbstractProcessor objProcessor)
-		{ System.Threading.Tasks.Task objTask;
+		{ Task objTask;
 				
 				// Añade el procesador a la cola
 					Queue.Add(objProcessor);
